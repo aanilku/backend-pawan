@@ -4,23 +4,21 @@ const app =express();
 const bodyParser =require('body-parser');
 const cors = require('cors');
 const AuthRouter = require('./Routes/AuthRouter');
+const AuthProduct = require('./Routes/ProductRouter');
 
 app.use(express.json());
 app.use(bodyParser.json()); 
 app.use(cors());
 
+require('dotenv').config(); // Corrected from 'dotnet' to 'dotenv'
+require('./Models/db');
+ 
 app.use('/auth',AuthRouter);
+app.use('/products',AuthProduct);
 
-// require('dotnet').config();
-// require('./Models/db');
+
 
 const PORT =process.env.PORT || 5080;
-
-
-
-// mongoose.connect('',{
-
-// })
 
 app.get('/',(req,res)=>{
     res.send('hello from the server!');
