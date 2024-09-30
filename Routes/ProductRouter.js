@@ -20,38 +20,32 @@ router.get('/',ensureAuthenticated, (req,res)=>{
         }
     ])
 });
-router.post('/profile', function (req, res) {
-    upload(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading.
-        console.log('upload file');
-      } else if (err) {
-        console.log(' error upload file');
-        // An unknown error occurred when uploading.
-      }
-  
-      // Everything went fine.
-    })
+
+
+// GET endpoint to retrieve all products
+app.get('/api/products', async (req, res) => {
+  try {
+      const products = await Product.find();
+      res.status(200).json(products);
+  } catch (error) {
+      res.status(500).json({ message: 'Error retrieving products', error });
+  }
 });
 
-// // Endpoint to create a new product
-// router.post('/', upload.single('image'), (req, res) => {
-//     const { title, description, price } = req.body;
-//     const image = req.file ? req.file.path : null;
 
-//     const newProduct = new Product({
-//         title,
-//         description,
-//         image,
-//         price
-       
-//     });
-
-//     newProduct.save((err, product) => {
-//         if (err) return res.status(500).send(err);
-//         res.status(201).json(product);
-//     });
-// });
-
+// POST endpoint to add a product with image upload
+app.post('/api/products', upload.single('image'), async (req, res) => {
+  try {
+      const newProduct = new Product({
+          name: req.body.name,
+          price: req.body.price,
+          image: req.file.path, // Save the path of the uploaded image
+      });
+      await newProduct.save();
+      res.status(201).json(newProduct);
+  } catch (error) {
+      res.status(500).json({ message: 'Error saving product', error });
+  }
+});
 
 module.exports = router;

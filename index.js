@@ -36,6 +36,10 @@ app.use('/products',AuthProduct);
 
 
 
+// Serve images from the uploads directory
+app.use('/uploads', express.static('uploads'));
+
+
 const PORT =process.env.PORT || 5080;
 
 app.get('/',(req,res)=>{
