@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 
 const signup = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
+    const { userName, email, password ,role } = req.body;
     const user = await UserModel.findOne({ email });
     if (user) {
       return res
@@ -14,7 +14,7 @@ const signup = async (req, res) => {
           success: false,
         });
     }
-    const userModel = new UserModel({ userName, email, password });
+    const userModel = new UserModel({ userName, email, password ,role });
     userModel.password = await bcrypt.hash(password, 10);
 
     await userModel.save(); // Save the user to the database
